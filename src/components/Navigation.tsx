@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils";
-import { SettingsIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import {
   GoHome,
@@ -7,6 +5,9 @@ import {
   GoCheckCircle,
   GoCheckCircleFill,
 } from "react-icons/go";
+import { SettingsIcon, UsersIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 const routes = [
   { label: "Home", href: "", icon: GoHome, activeIcon: GoHomeFill },

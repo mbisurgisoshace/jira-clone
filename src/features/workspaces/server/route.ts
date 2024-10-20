@@ -3,10 +3,10 @@ import { ID, Query } from "node-appwrite";
 import { zValidator } from "@hono/zod-validator";
 
 import {
-  DATABASE_ID,
-  IMAGES_BUCKET_ID,
   MEMBERS_ID,
+  DATABASE_ID,
   WORKSPACE_ID,
+  IMAGES_BUCKET_ID,
 } from "@/config";
 import { generateInviteCode } from "@/lib/utils";
 import { getMember } from "@/features/members/utils";
@@ -142,6 +142,25 @@ const app = new Hono()
 
       return c.json({ data: workspace });
     }
-  );
+  )
+  .delete("/:workspaceId", sessionMiddleware, async (c) => {
+    const user = c.get("user");
+    const databases = c.get("databases");
+
+    const { workspaceId } = c.req.param();
+
+    const member = await getMember({
+      databases,
+      workspaceId,
+      userId: user.$id,
+    });
+
+    if (!member || member.role !== MemberRole.ADMIN)
+      return c.json({ error: "Unauthorized" }, 401);
+
+    await databases.deleteDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
+
+    return c.json({ data: { $id: workspaceId } });
+  });
 
 export default app;

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { getCurrentUser } from "@/features/auth/actions";
+import { getCurrentUser } from "@/features/auth/queries";
 
 const WorkspaceIdPage = async () => {
   const user = await getCurrentUser();
